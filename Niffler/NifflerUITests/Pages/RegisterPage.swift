@@ -49,7 +49,7 @@ class RegisterPage: BasePage {
                 .waitForExistence(timeout: 5)
             
             XCTAssertTrue(isFound,
-                          "Не удалось создать пользователя",
+                          "Алерт об ошибке не появился",
                           file: file, line: line)
         }
     }

@@ -33,6 +33,12 @@ class LoginPage: BasePage {
         }
     }
     
+    func pressRegisterButton() {
+        XCTContext.runActivity(named: "Жму кнопку регистрации нового пользователя") { _ in
+            app.staticTexts["Create new account"].tap()
+        }
+    }
+    
     func assertIsLoginErrorShown(file: StaticString = #filePath, line: UInt = #line) {
         XCTContext.runActivity(named: "Жду сообщение с ошибкой") { _ in
             let isFound = app.staticTexts["LoginError"]

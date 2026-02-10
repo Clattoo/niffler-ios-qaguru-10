@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		313FF2232F339DA800A8B49B /* RegisterUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313FF2222F339DA800A8B49B /* RegisterUITests.swift */; };
+		313FF2252F339DB300A8B49B /* RegisterPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313FF2242F339DB300A8B49B /* RegisterPage.swift */; };
 		7468537A2B0CAE9700E48DFE /* NifflerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746853792B0CAE9700E48DFE /* NifflerApp.swift */; };
 		7468537C2B0CAE9700E48DFE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7468537B2B0CAE9700E48DFE /* ContentView.swift */; };
 		7468537E2B0CAE9700E48DFE /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7468537D2B0CAE9700E48DFE /* Item.swift */; };
@@ -51,6 +53,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		313FF2222F339DA800A8B49B /* RegisterUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterUITests.swift; sourceTree = "<group>"; };
+		313FF2242F339DB300A8B49B /* RegisterPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterPage.swift; sourceTree = "<group>"; };
 		746853762B0CAE9700E48DFE /* Niffler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Niffler.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		746853792B0CAE9700E48DFE /* NifflerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NifflerApp.swift; sourceTree = "<group>"; };
 		7468537B2B0CAE9700E48DFE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -156,6 +160,7 @@
 		74BDA2322C615BD8001B7630 /* Pages */ = {
 			isa = PBXGroup;
 			children = (
+				313FF2242F339DB300A8B49B /* RegisterPage.swift */,
 				74BDA22C2C614D47001B7630 /* BasePage.swift */,
 				74BDA2372C615C11001B7630 /* LoginPage.swift */,
 				74BDA2352C615BFA001B7630 /* SpendsPage.swift */,
@@ -167,6 +172,7 @@
 		74BDA2392C615C44001B7630 /* Test */ = {
 			isa = PBXGroup;
 			children = (
+				313FF2222F339DA800A8B49B /* RegisterUITests.swift */,
 				74BDA2302C615BB7001B7630 /* BaseTestCase.swift */,
 				74D55B792BE12B9600AEF67D /* LoginUITests.swift */,
 				74BDA22E2C614D8D001B7630 /* SpendsUITests.swift */,
@@ -360,6 +366,8 @@
 				74BDA22F2C614D8D001B7630 /* SpendsUITests.swift in Sources */,
 				74BDA2312C615BB7001B7630 /* BaseTestCase.swift in Sources */,
 				74BDA2362C615BFA001B7630 /* SpendsPage.swift in Sources */,
+				313FF2252F339DB300A8B49B /* RegisterPage.swift in Sources */,
+				313FF2232F339DA800A8B49B /* RegisterUITests.swift in Sources */,
 				74BDA2342C615BDD001B7630 /* NewSpendPage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

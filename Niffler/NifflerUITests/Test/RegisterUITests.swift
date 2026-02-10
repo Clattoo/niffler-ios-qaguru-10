@@ -13,6 +13,17 @@ final class RegisterUITests: TestCase {
         registerPage.assertIsRegisterSuccessfulMessageShown()
     }
     
+    func test_registerFailWithIncorrectCredentials() throws {
+        launchAppWithoutLogin()
+
+        // Act
+        loginPage.pressRegisterButton()
+        registerPage.input(username: "RandomUser8", password: "Qwerty1323", confirmPassword: "Qwerty123")
+        
+        // Assert
+        registerPage.assertIsRegisterErrorShown()
+    }
+    
     func test_fillLoginPageAndRegisterNewUser() throws {
         launchAppWithoutLogin()
 

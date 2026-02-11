@@ -46,8 +46,6 @@ final class SpendsUITests: TestCase {
     }
 }
 
-
-
 extension UUID {
     static var randomPart: String {
         UUID().uuidString.components(separatedBy: "-").first!

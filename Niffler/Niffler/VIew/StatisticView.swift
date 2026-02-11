@@ -39,6 +39,7 @@ extension StatisticView {
                 .bold()
                 .foregroundColor(.black)
         ).frame(width: 200)
+            .accessibilityIdentifier("allSpendsAmount")
     }
 
     @ViewBuilder

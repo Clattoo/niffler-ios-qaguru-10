@@ -27,7 +27,7 @@ class LoginPage: BasePage {
         }
     }
     
-    private func pressLoginButton() {
+    func pressLoginButton() {
         XCTContext.runActivity(named: "Жму кнопку логина") { _ in
             app.buttons["loginButton"].tap()
         }

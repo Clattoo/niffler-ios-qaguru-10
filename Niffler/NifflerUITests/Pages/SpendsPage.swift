@@ -28,6 +28,17 @@ class SpendsPage: BasePage {
         app.buttons["addSpendButton"].tap()
     }
     
+    func hasSpends(timeout: TimeInterval = 10) -> Bool {
+        let screenExists = app.scrollViews.firstMatch
+            .switches.firstMatch
+            .waitForExistence(timeout: timeout)
+        
+        guard screenExists else { return false }
+        
+        let count = app.scrollViews.firstMatch.switches.count
+        return count >= 1
+    }
+    
     func assertNewSpendIsShown(title: String, file: StaticString = #filePath, line: UInt = #line) {
         let isFound = app.firstMatch
             .scrollViews.firstMatch
@@ -35,5 +46,19 @@ class SpendsPage: BasePage {
             .waitForExistence(timeout: 1)
         
         XCTAssertTrue(isFound, file: file, line: line)
+    }
+    
+    func assertEmptyListOfSpends(file: StaticString = #filePath, line: UInt = #line) {
+        XCTContext.runActivity(named: "Жду пустого списка трат у нового пользователя") { _ in
+            let isFound = app.staticTexts["allSpendsAmount"].firstMatch
+            
+            XCTAssertTrue(isFound.waitForExistence(timeout: 10),
+                              "Не найден allSpendsAmount",
+                              file: file, line: line)
+            
+            XCTAssertEqual(isFound.label, "0 ₽",
+                               "Сумма трат не равна 0 ₽",
+                               file: file, line: line)
+        }
     }
 }

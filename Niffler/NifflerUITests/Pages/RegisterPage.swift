@@ -43,6 +43,12 @@ class RegisterPage: BasePage {
         }
     }
     
+    func pressLoginButtonAfterRegisterUser() {
+        XCTContext.runActivity(named: "Жму кнопку логина после создания нового пользователя на экране регистрации") { _ in
+            app.buttons["loginButton"].tap()
+        }
+    }
+    
     func assertIsRegisterErrorShown(file: StaticString = #filePath, line: UInt = #line) {
         XCTContext.runActivity(named: "Жду сообщение с ошибкой") { _ in
             let isFound = app.staticTexts["Не удалось создать пользователя"]
@@ -63,5 +69,9 @@ class RegisterPage: BasePage {
                           "Алерт об успешной регистрации не появился",
                           file: file, line: line)
         }
+    }
+    
+    func makeRandomUsername() -> String {
+        "RandomUser_\(Int.random(in: 1000...9999))"
     }
 }

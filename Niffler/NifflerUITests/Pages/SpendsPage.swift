@@ -52,13 +52,17 @@ class SpendsPage: BasePage {
         XCTContext.runActivity(named: "Жду пустого списка трат у нового пользователя") { _ in
             let isFound = app.staticTexts["allSpendsAmount"].firstMatch
             
-            XCTAssertTrue(isFound.waitForExistence(timeout: 10),
-                              "Не найден allSpendsAmount",
-                              file: file, line: line)
+            guard isFound.waitForExistence(timeout: 10) else {
+                XCTFail("Не найден allSpendsAmount", file: file, line: line)
+                return
+            }
+
+            let cellsCount = app.otherElements.matching(identifier: "spendsList").count
             
-            XCTAssertEqual(isFound.label, "0 ₽",
-                               "Сумма трат не равна 0 ₽",
-                               file: file, line: line)
+            guard cellsCount == 0 else {
+                XCTFail("Список трат не пуст", file: file, line: line)
+                return
+            }
         }
     }
 }

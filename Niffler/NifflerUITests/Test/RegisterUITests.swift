@@ -10,6 +10,11 @@ final class RegisterUITests: TestCase {
     let incorrectPassword = "Qwerty1234"
     let amount = "25"
     
+    override func setUp() {
+           super.setUp()
+           continueAfterFailure = false
+       }
+    
     func test_registerSuccess() throws {
         launchAppWithoutLogin()
 

@@ -2,12 +2,25 @@ import XCTest
 
 final class RegisterUITests: TestCase {
     
+    lazy var username = registerPage.makeRandomUsername()
+    lazy var title = newSpendPage.makeRandomSpendDescriptionTitle()
+    lazy var categoryTitle = newSpendPage.makeRandomSpendCategoryTitle()
+    
+    let password = "Qwerty123"
+    let incorrectPassword = "Qwerty1234"
+    let amount = "25"
+    
+    override func setUp() {
+           super.setUp()
+           continueAfterFailure = false
+       }
+    
     func test_registerSuccess() throws {
         launchAppWithoutLogin()
 
         // Act
         loginPage.pressRegisterButton()
-        registerPage.input(username: "RandomUser5", password: "Qwerty123", confirmPassword: "Qwerty123")
+        registerPage.input(username: username, password: password, confirmPassword: password)
         
         // Assert
         registerPage.assertIsRegisterSuccessfulMessageShown()
@@ -18,7 +31,7 @@ final class RegisterUITests: TestCase {
 
         // Act
         loginPage.pressRegisterButton()
-        registerPage.input(username: "RandomUser8", password: "Qwerty1323", confirmPassword: "Qwerty123")
+        registerPage.input(username: username, password: password, confirmPassword: incorrectPassword)
         
         // Assert
         registerPage.assertIsRegisterErrorShown()
@@ -28,7 +41,7 @@ final class RegisterUITests: TestCase {
         launchAppWithoutLogin()
 
         // Act
-        loginPage.input(login: "RandomUser6", password: "Qwerty123")
+        loginPage.input(login: username, password: password)
         loginPage.pressRegisterButton()
         registerPage.pressSignUpButton()
         
@@ -36,4 +49,37 @@ final class RegisterUITests: TestCase {
         registerPage.assertIsRegisterSuccessfulMessageShown()
     }
     
+    func test_registerNewUserAndCheckThatSpendsIsEmpty() throws {
+        launchAppWithoutLogin()
+        
+        // Act
+        registerUserAndLogin(username: username, password: password)
+        
+        // Assert
+        spendsPage.assertEmptyListOfSpends()
+    }
+    
+    func test_registerNewUserAndCreateNewCategory() throws {
+        launchAppWithoutLogin()
+        
+        // Act
+        registerUserAndLogin(username: username, password: password)
+        
+        // Assert
+        spendsPage.assertEmptyListOfSpends()
+        spendsPage.addSpent()
+        newSpendPage.createNewSpendAndCategory(amount: amount, title: title, categoryTitle: categoryTitle)
+        
+        spendsPage.assertNewSpendIsShown(title: title)
+    }
+    
+    private func registerUserAndLogin(username: String, password: String) {
+        loginPage.pressRegisterButton()
+        registerPage.input(username: username, password: password, confirmPassword: password)
+
+        registerPage.assertIsRegisterSuccessfulMessageShown()
+
+        registerPage.pressLoginButtonAfterRegisterUser()
+        loginPage.pressLoginButton()
+    }
 }

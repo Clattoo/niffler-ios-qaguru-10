@@ -81,6 +81,8 @@ extension MenuView {
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("menuList")
     }
 
     @ViewBuilder

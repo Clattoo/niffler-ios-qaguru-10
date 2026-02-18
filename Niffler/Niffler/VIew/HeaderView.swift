@@ -49,6 +49,7 @@ extension HeaderView {
                     RoundedRectangle(cornerRadius: 10)
                         .stroke(AppColors.gray_300, lineWidth: 1)
                 )
+                .accessibilityIdentifier("menuButton")
         }
     }
 

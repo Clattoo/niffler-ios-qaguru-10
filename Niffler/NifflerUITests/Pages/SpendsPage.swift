@@ -11,7 +11,7 @@ class SpendsPage: BasePage {
     }
     
     @discardableResult
-    func waitSpendsScreen(file: StaticString = #filePath, line: UInt = #line) -> Self {
+    func waitSpendsScreenWithSpends(file: StaticString = #filePath, line: UInt = #line) -> Self {
         let isFound = app.firstMatch
             .scrollViews.firstMatch
             .switches.firstMatch
@@ -24,8 +24,40 @@ class SpendsPage: BasePage {
         return self
     }
     
+    @discardableResult
+    func waitSpendsScreen(file: StaticString = #filePath, line: UInt = #line) -> Self {
+        XCTContext.runActivity(named: "Жду экран со списком трат") { _ in
+            let isFound = app.staticTexts["allSpendsAmount"].firstMatch.waitForExistence(timeout: 10)
+            XCTAssertTrue(isFound, "Не дождались отображения экрана с тратами'", file: file, line: line)
+        }
+        
+        return self
+    }
+    
+    @discardableResult
+    func waitMenuList(file: StaticString = #filePath, line: UInt = #line) -> Self {
+        let isFound = app.otherElements["menuList"]
+            .waitForExistence(timeout: 10)
+        
+        XCTAssertTrue(isFound,
+                      "Не дождались экрана меню с разделами приложения",
+                      file: file, line: line)
+        
+        return self
+    }
+    
     func addSpent() {
         app.buttons["addSpendButton"].tap()
+    }
+    
+    func clickMenuButton() {
+        waitSpendsScreen()
+        app.images["menuButton"].tap()
+    }
+    
+    func clickProfileButton() {
+        waitMenuList()
+        app.buttons["Profile"].tap()
     }
     
     func hasSpends(timeout: TimeInterval = 10) -> Bool {

@@ -27,19 +27,26 @@ class LoginPage: BasePage {
         }
     }
     
-    func pressLoginButton() {
+    @discardableResult
+    func pressLoginButton() -> Self {
         XCTContext.runActivity(named: "Жму кнопку логина") { _ in
             app.buttons["loginButton"].tap()
         }
+        
+        return self
     }
     
-    func pressRegisterButton() {
+    @discardableResult
+    func pressRegisterButton() -> Self {
         XCTContext.runActivity(named: "Жму кнопку регистрации нового пользователя") { _ in
             app.staticTexts["Create new account"].tap()
         }
+        
+        return self
     }
     
-    func assertIsLoginErrorShown(file: StaticString = #filePath, line: UInt = #line) {
+    @discardableResult
+    func assertIsLoginErrorShown(file: StaticString = #filePath, line: UInt = #line) -> Self {
         XCTContext.runActivity(named: "Жду сообщение с ошибкой") { _ in
             let isFound = app.staticTexts["LoginError"]
                 .waitForExistence(timeout: 5)
@@ -48,9 +55,12 @@ class LoginPage: BasePage {
                           "Не нашли сообщение о неправильном логине",
                           file: file, line: line)
         }
+        
+        return self
     }
     
-    func assertNoErrorShown(file: StaticString = #filePath, line: UInt = #line) {
+    @discardableResult
+    func assertNoErrorShown(file: StaticString = #filePath, line: UInt = #line) -> Self {
         XCTContext.runActivity(named: "Жду сообщение с ошибкой") { _ in
             let errorLabel =
              app.staticTexts[
@@ -64,5 +74,7 @@ class LoginPage: BasePage {
                            "Появилась ошибка: \(errorLabel.label)",
                           file: file, line: line)
         }
+        
+        return self
     }
 }

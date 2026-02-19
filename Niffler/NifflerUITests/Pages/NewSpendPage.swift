@@ -10,8 +10,9 @@ class NewSpendPage: BasePage {
         .pressAddSpend()
     }
     
-    func inputSpentWithNewCategory(amount: String, title: String, categoryTitle: String) {
-        XCTContext.runActivity(named: "Создаю новый spending с параметрами amount:\(amount), title:\(title), categoryTitle:\(categoryTitle)") { _ in
+    @discardableResult
+    func inputSpentWithNewCategory(amount: String, title: String, categoryTitle: String) -> Self {
+        XCTContext.runActivity(named: "Ввожу данные для нового spending с параметрами amount:\(amount), title:\(title), categoryTitle:\(categoryTitle)") { _ in
                 
                 inputAmountWithSum(amount: amount)
                     .inputDescription(title)
@@ -27,6 +28,8 @@ class NewSpendPage: BasePage {
                 
                 pressAddSpend()
             }
+        
+        return self
     }
     
     @discardableResult
@@ -43,6 +46,7 @@ class NewSpendPage: BasePage {
         return self
     }
     
+    @discardableResult
     func selectCategory() -> Self {
         app.buttons["Select category"].tap()
         app.buttons["Рыбалка"].tap() // TODO: Bug
@@ -98,12 +102,19 @@ class NewSpendPage: BasePage {
 //        return self
 //    }
     
-    func pressAddSpend() {
+    @discardableResult
+    func pressAddSpend() -> Self {
         app.buttons["Add"].tap()
+        
+        return self
     }
     
-    func createNewSpendAndCategory(amount: String, title: String, categoryTitle: String) {
-        inputSpentWithNewCategory(amount: amount, title: title, categoryTitle: categoryTitle)
+    @discardableResult
+    func createNewSpendAndCategory(amount: String, title: String, categoryTitle: String) -> Self {
+        XCTContext.runActivity(named: "Создаю новую трат с категории со следующими параметрами: \(amount), \(title), \(categoryTitle)") { _ in
+            inputSpentWithNewCategory(amount: amount, title: title, categoryTitle: categoryTitle)
+        }
+        return self
     }
     
     func makeRandomSpendDescriptionTitle() -> String {

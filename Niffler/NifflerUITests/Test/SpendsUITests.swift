@@ -15,7 +15,7 @@ final class SpendsUITests: TestCase {
         
         // Act
         spendsPage
-            .waitSpendsScreen()
+            .waitSpendsScreenWithSpends()
             .addSpent()
         
         let title = UUID.randomPart
@@ -43,6 +43,41 @@ final class SpendsUITests: TestCase {
         
         // Assert
         spendsPage.assertNewSpendIsShown(title: descriptionTitle)
+    }
+    
+    func test_checkNewCategoryExistsAfterCreatingSpendWithNewCategory() {
+        launchAppWithoutLogin()
+        
+        loginPage.input(login: "RandomUser12", password: "Qwerty123")
+        
+        spendsPage
+            .waitSpendsScreen()
+            .addSpent()
+        newSpendPage.createNewSpendAndCategory(amount: amount, title: descriptionTitle, categoryTitle: categoryTitle)
+        
+        spendsPage.openUserProfile()
+        
+        profilePage.assertCategoryExists(categoryTitle)
+    }
+    
+    func test_checkCategoryNotExistsAfterDeletingFromProfileInNewSpendScreen() {
+        launchAppWithoutLogin()
+        
+        loginPage.input(login: "RandomUser13", password: "Qwerty123")
+        
+        spendsPage
+            .waitSpendsScreen()
+            .addSpent()
+        newSpendPage.createNewSpendAndCategory(amount: amount, title: descriptionTitle, categoryTitle: categoryTitle)
+        
+        spendsPage.openUserProfile()
+        profilePage
+            .assertCategoryExists(categoryTitle)
+            .deleteCategory(categoryTitle)
+            .pressCloseButton()
+        
+        spendsPage.addSpent()
+        newSpendPage.checkCategoriesNotExist(categoryTitle)
     }
 }
 

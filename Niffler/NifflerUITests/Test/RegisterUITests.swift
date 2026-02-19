@@ -41,8 +41,10 @@ final class RegisterUITests: TestCase {
         launchAppWithoutLogin()
 
         // Act
-        loginPage.input(login: username, password: password)
-        loginPage.pressRegisterButton()
+        loginPage
+            .input(login: username, password: password)
+            .pressRegisterButton()
+        
         registerPage.pressSignUpButton()
         
         // Assert
@@ -66,8 +68,10 @@ final class RegisterUITests: TestCase {
         registerUserAndLogin(username: username, password: password)
         
         // Assert
-        spendsPage.assertEmptyListOfSpends()
-        spendsPage.addSpent()
+        spendsPage
+            .assertEmptyListOfSpends()
+            .addSpent()
+        
         newSpendPage.createNewSpendAndCategory(amount: amount, title: title, categoryTitle: categoryTitle)
         
         spendsPage.assertNewSpendIsShown(title: title)
@@ -75,11 +79,11 @@ final class RegisterUITests: TestCase {
     
     private func registerUserAndLogin(username: String, password: String) {
         loginPage.pressRegisterButton()
-        registerPage.input(username: username, password: password, confirmPassword: password)
-
-        registerPage.assertIsRegisterSuccessfulMessageShown()
-
-        registerPage.pressLoginButtonAfterRegisterUser()
+        registerPage
+            .input(username: username, password: password, confirmPassword: password)
+            .assertIsRegisterSuccessfulMessageShown()
+            .pressLoginButtonAfterRegisterUser()
+        
         loginPage.pressLoginButton()
     }
 }

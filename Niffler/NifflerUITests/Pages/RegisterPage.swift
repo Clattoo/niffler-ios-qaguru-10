@@ -37,19 +37,26 @@ class RegisterPage: BasePage {
         }
     }
     
-    func pressSignUpButton() {
+    @discardableResult
+    func pressSignUpButton() -> Self {
         XCTContext.runActivity(named: "Жму кнопку создания пользователя") { _ in
             app.buttons["Sign Up"].firstMatch.tap()
         }
+        
+        return self
     }
     
-    func pressLoginButtonAfterRegisterUser() {
+    @discardableResult
+    func pressLoginButtonAfterRegisterUser() -> Self {
         XCTContext.runActivity(named: "Жму кнопку логина после создания нового пользователя на экране регистрации") { _ in
             app.buttons["loginButton"].tap()
         }
+        
+        return self
     }
     
-    func assertIsRegisterErrorShown(file: StaticString = #filePath, line: UInt = #line) {
+    @discardableResult
+    func assertIsRegisterErrorShown(file: StaticString = #filePath, line: UInt = #line) -> Self {
         XCTContext.runActivity(named: "Жду сообщение с ошибкой") { _ in
             let isFound = app.staticTexts["Не удалось создать пользователя"]
                 .waitForExistence(timeout: 5)
@@ -58,9 +65,12 @@ class RegisterPage: BasePage {
                           "Алерт об ошибке не появился",
                           file: file, line: line)
         }
+        
+        return self
     }
     
-    func assertIsRegisterSuccessfulMessageShown(file: StaticString = #filePath, line: UInt = #line) {
+    @discardableResult
+    func assertIsRegisterSuccessfulMessageShown(file: StaticString = #filePath, line: UInt = #line) -> Self {
         XCTContext.runActivity(named: "Жду сообщение с успешной регистрацией пользователя") { _ in
             let isFound = app.alerts["Congratulations!"]
                 .waitForExistence(timeout: 5)
@@ -69,6 +79,8 @@ class RegisterPage: BasePage {
                           "Алерт об успешной регистрации не появился",
                           file: file, line: line)
         }
+        
+        return self
     }
     
     func makeRandomUsername() -> String {

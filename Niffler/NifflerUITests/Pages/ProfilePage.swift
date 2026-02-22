@@ -1,7 +1,7 @@
 import XCTest
 
 class ProfilePage: BasePage {
-
+    
     func pressAddCategoryButton() {
         app.buttons["Add Category"].tap()
     }
@@ -13,11 +13,10 @@ class ProfilePage: BasePage {
     func pressDeleteCategoryButton(categoryName: String) {
         XCTAssertTrue(app.buttons["Delete"].waitForExistence(timeout: 1))
         app.buttons["Delete"].tap()
-        sleep(1)
-        let deletedCategory = app.collectionViews.firstMatch
-            .staticTexts[categoryName].firstMatch
-                
-        XCTAssertFalse(deletedCategory.waitForExistence(timeout: 1), file: #file, line: #line)
+        
+        let deletedCategory = categoryElement(categoryName)
+        XCTAssertFalse(deletedCategory.waitForExistence(timeout: 3),
+                       "Категория '\(categoryName)' не удалена после нажатия Delete")
     }
     
     @discardableResult
@@ -38,27 +37,31 @@ class ProfilePage: BasePage {
     }
     
     func assertCategoryExists(_ categoryName: String, file: StaticString = #filePath, line: UInt = #line) {
-            XCTContext.runActivity(named: "Проверяю наличие категории: \(categoryName)") { _ in
-                let predicate = NSPredicate(format: "label == %@", categoryName)
-                let categoryElement = app.staticTexts.matching(predicate).firstMatch
-                
-                let exists = categoryElement.waitForExistence(timeout: 5)
-                XCTAssertTrue(exists, "Категория '\(categoryName)' не найдена в списке", file: file, line: line)
-            }
+        XCTContext.runActivity(named: "Проверяю наличие категории: \(categoryName)") { _ in
+            let element = categoryElement(categoryName)
+            XCTAssertTrue(element.waitForExistence(timeout: 5),
+                          "Категория '\(categoryName)' не найдена в списке",
+                          file: file, line: line)
         }
-        
-     func assertCategoryNotExists(_ categoryName: String, file: StaticString = #filePath, line: UInt = #line) {
-            XCTContext.runActivity(named: "Проверяю отсутствие категории: \(categoryName)") { _ in
-                let predicate = NSPredicate(format: "label == %@", categoryName)
-                let categoryElement = app.staticTexts.matching(predicate).firstMatch
-                
-                let exists = categoryElement.waitForExistence(timeout: 1)
-                XCTAssertFalse(exists, "Категория '\(categoryName)' найдена, хотя не должна быть", file: file, line: line)
-            }
+    }
+    
+    func assertCategoryNotExists(_ categoryName: String, file: StaticString = #filePath, line: UInt = #line) {
+        XCTContext.runActivity(named: "Проверяю отсутствие категории: \(categoryName)") { _ in
+            let element = categoryElement(categoryName)
+            XCTAssertFalse(element.waitForExistence(timeout: 1),
+                           "Категория '\(categoryName)' найдена, хотя не должна быть",
+                           file: file, line: line)
         }
+    }
     
     func deleteCategory(_ categoryName: String) {
         swipeCategory(categoryName: categoryName)
         pressDeleteCategoryButton(categoryName: categoryName)
+    }
+    
+    private func categoryElement(_ categoryName: String) -> XCUIElement {
+        return app.staticTexts.matching(identifier: "categoriesSection")
+                              .matching(NSPredicate(format: "label == %@", categoryName))
+                              .firstMatch
     }
 }

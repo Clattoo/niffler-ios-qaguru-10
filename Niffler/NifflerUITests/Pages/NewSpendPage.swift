@@ -17,14 +17,13 @@ class NewSpendPage: BasePage {
                 inputAmountWithSum(amount: amount)
                     .inputDescription(title)
                 
-                if app.staticTexts["+ New category"].exists {
-                    app.buttons["Select category"].tap()
-                    createNewCategory(categoryTitle)
-                } else {
-                    app.buttons["Select category"].tap()
-                    app.buttons["+ New category"].tap()
-                    createNewCategory(categoryTitle)
-                }
+            app.buttons["Select category"].tap()
+
+            if app.buttons["+ New category"].waitForExistence(timeout: 1) {
+                app.buttons["+ New category"].tap()
+            }
+
+            createNewCategory(categoryTitle)
                 
                 pressAddSpend()
             }
@@ -75,23 +74,23 @@ class NewSpendPage: BasePage {
     @discardableResult
     func checkCategoriesNotExist(_ title: String) -> Self {
         XCTContext.runActivity(named: "Проверяю, что в категориях нет \(title)") { _ in
-            let selectCategoryButton = app.buttons["Select category"]
-            
-            if selectCategoryButton.label == "+ New category" {
-                // Список пуст, категории точно нет
-                return
-            }
-            
-            if selectCategoryButton.exists {
+                let selectCategoryButton = app.buttons["Select category"]
+                
+                if selectCategoryButton.label == "+ New category" {
+                    XCTAssertEqual(selectCategoryButton.label, "+ New category",
+                                   "Ожидалось, что список категорий пуст")
+                    return
+                }
+                
+                XCTAssertTrue(selectCategoryButton.exists, "Кнопка выбора категории отсутствует")
                 selectCategoryButton.tap()
+                
+                let categoryButton = app.buttons[title]
+                let exists = categoryButton.waitForExistence(timeout: 1)
+                
+                XCTAssertFalse(exists, "Категория '\(title)' найдена, хотя её не должно быть")
             }
-            
-            let categoryButton = app.buttons[title]
-            let exists = categoryButton.waitForExistence(timeout: 1)
-            
-            XCTAssertFalse(exists, "Категория '\(title)' найдена, хотя её не должно быть")
-        }
-        return self
+            return self
     }
     
     

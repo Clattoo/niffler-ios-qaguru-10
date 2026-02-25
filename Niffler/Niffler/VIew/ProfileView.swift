@@ -72,6 +72,7 @@ extension ProfileView {
                 // TODO: Show alert
             }
         }
+        .accessibilityIdentifier("categoriesSection")
         .listStyle(.insetGrouped)
     }
 

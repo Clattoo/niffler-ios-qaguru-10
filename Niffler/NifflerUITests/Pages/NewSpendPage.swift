@@ -10,23 +10,25 @@ class NewSpendPage: BasePage {
         .pressAddSpend()
     }
     
-    func inputSpentWithNewCategory(amount: String, title: String, categoryTitle: String) {
-        XCTContext.runActivity(named: "Создаю новый spending с параметрами amount:\(amount), title:\(title), categoryTitle:\(categoryTitle)") { _ in
+    @discardableResult
+    func inputSpentWithNewCategory(amount: String, title: String, categoryTitle: String) -> Self {
+        XCTContext.runActivity(named: "Ввожу данные для нового spending с параметрами amount:\(amount), title:\(title), categoryTitle:\(categoryTitle)") { _ in
                 
                 inputAmountWithSum(amount: amount)
                     .inputDescription(title)
                 
-                if app.staticTexts["+ New category"].exists {
-                    app.buttons["Select category"].tap()
-                    createNewCategory(categoryTitle)
-                } else {
-                    app.buttons["Select category"].tap()
-                    app.buttons["+ New category"].tap()
-                    createNewCategory(categoryTitle)
-                }
+            app.buttons["Select category"].tap()
+
+            if app.buttons["+ New category"].waitForExistence(timeout: 1) {
+                app.buttons["+ New category"].tap()
+            }
+
+            createNewCategory(categoryTitle)
                 
                 pressAddSpend()
             }
+        
+        return self
     }
     
     @discardableResult
@@ -43,6 +45,7 @@ class NewSpendPage: BasePage {
         return self
     }
     
+    @discardableResult
     func selectCategory() -> Self {
         app.buttons["Select category"].tap()
         app.buttons["Рыбалка"].tap() // TODO: Bug
@@ -71,23 +74,23 @@ class NewSpendPage: BasePage {
     @discardableResult
     func checkCategoriesNotExist(_ title: String) -> Self {
         XCTContext.runActivity(named: "Проверяю, что в категориях нет \(title)") { _ in
-            let selectCategoryButton = app.buttons["Select category"]
-            
-            if selectCategoryButton.label == "+ New category" {
-                // Список пуст, категории точно нет
-                return
-            }
-            
-            if selectCategoryButton.exists {
+                let selectCategoryButton = app.buttons["Select category"]
+                
+                if selectCategoryButton.label == "+ New category" {
+                    XCTAssertEqual(selectCategoryButton.label, "+ New category",
+                                   "Ожидалось, что список категорий пуст")
+                    return
+                }
+                
+                XCTAssertTrue(selectCategoryButton.exists, "Кнопка выбора категории отсутствует")
                 selectCategoryButton.tap()
+                
+                let categoryButton = app.buttons[title]
+                let exists = categoryButton.waitForExistence(timeout: 1)
+                
+                XCTAssertFalse(exists, "Категория '\(title)' найдена, хотя её не должно быть")
             }
-            
-            let categoryButton = app.buttons[title]
-            let exists = categoryButton.waitForExistence(timeout: 1)
-            
-            XCTAssertFalse(exists, "Категория '\(title)' найдена, хотя её не должно быть")
-        }
-        return self
+            return self
     }
     
     
@@ -98,12 +101,19 @@ class NewSpendPage: BasePage {
 //        return self
 //    }
     
-    func pressAddSpend() {
+    @discardableResult
+    func pressAddSpend() -> Self {
         app.buttons["Add"].tap()
+        
+        return self
     }
     
-    func createNewSpendAndCategory(amount: String, title: String, categoryTitle: String) {
-        inputSpentWithNewCategory(amount: amount, title: title, categoryTitle: categoryTitle)
+    @discardableResult
+    func createNewSpendAndCategory(amount: String, title: String, categoryTitle: String) -> Self {
+        XCTContext.runActivity(named: "Создаю новую трат с категории со следующими параметрами: \(amount), \(title), \(categoryTitle)") { _ in
+            inputSpentWithNewCategory(amount: amount, title: title, categoryTitle: categoryTitle)
+        }
+        return self
     }
     
     func makeRandomSpendDescriptionTitle() -> String {

@@ -55,8 +55,8 @@ final class SpendsUITests: TestCase {
             .addSpent()
         newSpendPage.createNewSpendAndCategory(amount: amount, title: descriptionTitle, categoryTitle: categoryTitle)
         
-        spendsPage.clickMenuButton()
-        spendsPage.clickProfileButton()
+        spendsPage.openUserProfile()
+        
         profilePage.assertCategoryExists(categoryTitle)
     }
     
@@ -70,12 +70,12 @@ final class SpendsUITests: TestCase {
             .addSpent()
         newSpendPage.createNewSpendAndCategory(amount: amount, title: descriptionTitle, categoryTitle: categoryTitle)
         
-        spendsPage.clickMenuButton()
-        spendsPage.clickProfileButton()
-        profilePage.assertCategoryExists(categoryTitle)
-        profilePage.deleteCategory(categoryTitle)
+        spendsPage.openUserProfile()
+        profilePage
+            .assertCategoryExists(categoryTitle)
+            .deleteCategory(categoryTitle)
+            .pressCloseButton()
         
-        profilePage.pressCloseButton()
         spendsPage.addSpent()
         newSpendPage.checkCategoriesNotExist(categoryTitle)
     }
